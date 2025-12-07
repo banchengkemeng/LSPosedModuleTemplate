@@ -1,7 +1,7 @@
 # LSPosed Module Template
 LSPosed模块 项目模板
 
-## Custom
+## 自定义
 ### Project Name
 1. settings.gradle.kts: rootProject.name
 
@@ -19,3 +19,8 @@ LSPosed模块 项目模板
 
 ### App Name
 1. app/src/main/res/values/strings.xml: app_name
+
+## 工具类
+### 1. utils.LogUtil
+日志工具类
+> 用于打印日志, 会同时输出到 Logcat 和 XposedBridge
