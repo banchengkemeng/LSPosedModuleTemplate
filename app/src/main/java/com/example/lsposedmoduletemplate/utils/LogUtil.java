@@ -18,7 +18,7 @@ public class LogUtil {
 
     public void debug(String tag, String msg) {
         Log.d(tag, msg);
-        XposedBridge.log(String.format("%s %s", tag, msg));
+        XposedBridge.log(String.format("[DEBUG] %s %s", tag, msg));
     }
 
     public void debug(String msg) {
@@ -27,7 +27,7 @@ public class LogUtil {
 
     public void info(String tag, String msg) {
         Log.i(tag, msg);
-        XposedBridge.log(String.format("%s %s", tag, msg));
+        XposedBridge.log(String.format("[INFO] %s %s", tag, msg));
     }
 
     public void info(String msg) {
@@ -36,7 +36,7 @@ public class LogUtil {
 
     public void error(String tag, String msg) {
         Log.e(tag, msg);
-        XposedBridge.log(String.format("[%s] %s %s", "ERROR", tag, msg));
+        XposedBridge.log(String.format("[ERROR] %s %s", tag, msg));
     }
 
     public void error(String msg) {
