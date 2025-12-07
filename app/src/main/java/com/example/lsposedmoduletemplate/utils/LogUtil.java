@@ -45,11 +45,14 @@ public class LogUtil {
 
     public void error(String tag, String msg, Throwable e) {
         Log.e(tag, msg, e);
-        XposedBridge.log(String.format("[%s] %s %s", "ERROR", tag, msg));
-        XposedBridge.log(e);
+        XposedBridge.log(new Throwable(String.format("[%s] %s %s", "ERROR", tag, msg), e));
     }
 
     public void error(String msg, Throwable e) {
         error(logTag, msg, e);
+    }
+
+    public void error(Throwable e) {
+        error(logTag, "", e);
     }
 }
