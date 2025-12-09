@@ -17,11 +17,11 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven {
-            url = uri("https://api.xposed.info/")
+            url "https://api.xposed.info/"
         }
     }
 }
 
 rootProject.name = "LsposedModuleTemplate"
-include(":app")
+include ":app"
  
