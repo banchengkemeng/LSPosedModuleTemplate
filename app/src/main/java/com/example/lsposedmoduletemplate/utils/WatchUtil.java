@@ -1,5 +1,7 @@
 package com.example.lsposedmoduletemplate.utils;
 
+import android.util.Log;
+
 import com.example.lsposedmoduletemplate.GlobalInstance;
 
 import java.lang.reflect.Constructor;
@@ -22,8 +24,6 @@ public class WatchUtil {
     public static final int LOG_FORMAT_FLAG_DUMP_ARGS = 1 << 2;
     public static final int LOG_FORMAT_FLAG_DUMP_RETURN = 1 << 1;
     public static final int LOG_FORMAT_FLAG_DUMP_BACKTRACE = 1;
-
-    private static final LogUtil logUtil = GlobalInstance.logUtil;
 
     public static void watchConstructor(
             ClassLoader classLoader,
@@ -79,6 +79,7 @@ class WatchMethodHook extends XC_MethodHook {
 
     private static final LogUtil logUtil = GlobalInstance.logUtil;
     private final int logFormatFlag;
+    private StringBuilder trace;
 
     public WatchMethodHook(int logFormatFlag) {
         this.logFormatFlag = logFormatFlag;
@@ -87,9 +88,9 @@ class WatchMethodHook extends XC_MethodHook {
     @Override
     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
         try {
-            logUtil.info("Call Before: " + buildCallMethodSignature(param));
+            trace = new StringBuilder("Hooked Call\nSignature: " + buildCallMethodSignature(param));
             if (shouldDumpArgs()) {
-                logUtil.info("Args: " + Arrays.toString(param.args));
+                trace.append("\nArgs: ").append(buildArgs(param.args));
             }
             super.beforeHookedMethod(param);
         } catch (Throwable e) {
@@ -102,16 +103,13 @@ class WatchMethodHook extends XC_MethodHook {
     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
         try {
             super.afterHookedMethod(param);
-            if (!shouldDumpReturn() && !shouldDumpBACKTRACE()) {
-                return;
-            }
-            logUtil.info("Call After: " + buildCallMethodSignature(param));
             if (shouldDumpReturn()) {
-                logUtil.info("Return: " + param.getResult());
+                trace.append("\nReturn: ").append(param.getResult());
             }
             if (shouldDumpBACKTRACE()) {
-                logUtil.info("Backtrace: " + "test");
+                trace.append("\nBacktrace: ").append(Log.getStackTraceString(new Throwable()));
             }
+            logUtil.info(trace.toString());
         } catch (Throwable e) {
             logUtil.error(e);
             throw e;
@@ -154,8 +152,13 @@ class WatchMethodHook extends XC_MethodHook {
         );
     }
 
-    private String buildArgs(MethodHookParam param) {
-        return "";
+    private String buildArgs(Object[] args) {
+        String argsString = Arrays.toString(args);
+        return String.format("(%s)",
+                argsString.length() > 2
+                        ? argsString.substring(1, argsString.length() - 1)
+                        : ""
+        );
     }
 
     private boolean shouldDumpArgs() {
