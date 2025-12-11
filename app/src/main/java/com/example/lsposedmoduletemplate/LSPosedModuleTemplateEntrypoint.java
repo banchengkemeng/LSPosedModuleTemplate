@@ -28,13 +28,18 @@ public class LSPosedModuleTemplateEntrypoint implements IXposedHookLoadPackage {
                 WatchUtil.LOG_FORMAT_FLAG_DUMP_RETURN;
 
         try {
-            WatchUtil.watchMethod(
+            WatchUtil.watchClass(
                     lpparam.classLoader,
-                    flag,
-                    false,
-                    "com.example.demoapp.testdemo.TestClass",
-                    "test"
+                    0,
+                    "com.example.demoapp.testdemo.TestClass"
             );
+//            WatchUtil.watchMethod(
+//                    lpparam.classLoader,
+//                    flag,
+//                    false,
+//                    "com.example.demoapp.testdemo.TestClass",
+//                    "test"
+//            );
 
 //            WatchUtil.watchConstructor(
 //                    lpparam.classLoader,

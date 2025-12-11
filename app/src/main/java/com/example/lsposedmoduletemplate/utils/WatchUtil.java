@@ -41,14 +41,7 @@ public class WatchUtil {
             return;
         }
 
-        for (Constructor<?> declaredConstructor : clazz.getDeclaredConstructors()) {
-            declaredConstructor.setAccessible(true);
-            ArrayList<Object> parameterTypesAndCallback = new ArrayList<>(Arrays.asList(
-                    declaredConstructor.getParameterTypes()
-            ));
-            parameterTypesAndCallback.add(new WatchMethodHook(logFormatFlag));
-            XposedHelpers.findAndHookConstructor(clazz, parameterTypesAndCallback.toArray());
-        }
+        watchAllConstructor(clazz, logFormatFlag);
     }
 
     public static void watchMethod(
@@ -67,12 +60,41 @@ public class WatchUtil {
             XposedHelpers.findAndHookMethod(clazz, methodName, parameterTypesAndCallback.toArray());
             return;
         }
+        watchAllMethod(clazz, logFormatFlag, methodName);
+    }
 
+    public static void watchClass(
+            ClassLoader classLoader,
+            int logFormatFlag,
+            String className
+    ) {
+        Class<?> clazz = XposedHelpers.findClass(className, classLoader);
+        watchAllConstructor(clazz, logFormatFlag);
+        watchAllMethod(clazz, logFormatFlag, null);
+    }
+
+
+    private static void watchAllConstructor(Class<?> clazz, int logFormatFlag) {
+        for (Constructor<?> declaredConstructor : clazz.getDeclaredConstructors()) {
+            declaredConstructor.setAccessible(true);
+            ArrayList<Object> parameterTypesAndCallback = new ArrayList<>(Arrays.asList(
+                    declaredConstructor.getParameterTypes()
+            ));
+            parameterTypesAndCallback.add(new WatchMethodHook(logFormatFlag));
+            XposedHelpers.findAndHookConstructor(clazz, parameterTypesAndCallback.toArray());
+        }
+    }
+
+    private static void watchAllMethod(Class<?> clazz, int logFormatFlag, String methodName) {
         for (Method declaredMethod : clazz.getDeclaredMethods()) {
             declaredMethod.setAccessible(true);
+            if (methodName != null && methodName.equals(declaredMethod.getName())) {
+                continue;
+            }
             XposedBridge.hookMethod(declaredMethod, new WatchMethodHook(logFormatFlag));
         }
     }
+
 }
 
 class WatchMethodHook extends XC_MethodHook {
