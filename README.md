@@ -27,6 +27,7 @@ LSPosed模块 项目模板
 ### 2. utils.WatchUtil
 监控工具类
 1. 监控 构造器/函数 的调用 watchConstructor/watchMethod
+2. 监控 类中所有函数/构造 的调用 watchClass
 ```text
 Log格式如下: 
 Signature: int com.example.demoapp.testdemo.TestClass.test(java.lang.String, int, boolean)
