@@ -88,7 +88,7 @@ public class WatchUtil {
     private static void watchAllMethod(Class<?> clazz, int logFormatFlag, String methodName) {
         for (Method declaredMethod : clazz.getDeclaredMethods()) {
             declaredMethod.setAccessible(true);
-            if (methodName != null && methodName.equals(declaredMethod.getName())) {
+            if (methodName != null && !methodName.equals(declaredMethod.getName())) {
                 continue;
             }
             XposedBridge.hookMethod(declaredMethod, new WatchMethodHook(logFormatFlag));

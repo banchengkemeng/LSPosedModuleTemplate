@@ -10,7 +10,10 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
 public class LSPosedModuleTemplateEntrypoint implements IXposedHookLoadPackage {
 
-    private final LogUtil logUtil = new LogUtil("LSPosedModuleTemplate");
+    private LogUtil initLogUtil() {
+        GlobalInstance.logUtil = new LogUtil("LSPosedModuleTemplate");
+        return GlobalInstance.logUtil;
+    }
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
@@ -18,9 +21,9 @@ public class LSPosedModuleTemplateEntrypoint implements IXposedHookLoadPackage {
             return;
         }
 
-        logUtil.info("Loading Package: " + lpparam.packageName);
+        LogUtil logUtil = initLogUtil();
 
-        GlobalInstance.logUtil = logUtil;
+        logUtil.info("Loading Package: " + lpparam.packageName);
         logUtil.info("Hook Loading Success!");
 
         int flag = WatchUtil.LOG_FORMAT_FLAG_DUMP_ARGS |
