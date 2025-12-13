@@ -3,14 +3,14 @@ LSPosed模块 项目模板
 
 ## 自定义
 ### Project Name
-1. settings.gradle.kts: rootProject.name
+1. settings.gradle: rootProject.name
 
 ### SDK Path
 1. local.properties: sdk.dir
 
 ### Class Name
-1. app/build.gradle.kts: android.namespace
-2. app/build.gradle.kts: android.defaultConfig.applicationId
+1. app/build.gradle: android.namespace
+2. app/build.gradle: android.defaultConfig.applicationId
 
 ### Entrypoint Class Name
 1. app/src/main/assets/xposed_init
