@@ -10,54 +10,72 @@ import de.robv.android.xposed.XposedBridge;
 
 public class LogUtil {
 
-    private final String logTag;
+    private static String logTag = "LSPosedModuleTemplate" + "_LSP_TAG";
+    private static boolean existsXposedBridge = true;
+
+    static {
+        try {
+            Class.forName("de.robv.android.xposed.XposedBridge");
+        } catch (ClassNotFoundException e) {
+            existsXposedBridge = false;
+        } catch (Exception ignored) {
+        }
+    }
 
     public LogUtil(String prefix) {
-        this.logTag = prefix + "_LSP_TAG";
+        logTag = prefix + "_LSP_TAG";
     }
 
-    public void debug(String tag, String msg) {
+    public static void debug(String tag, String msg) {
         Log.d(tag, msg);
-        XposedBridge.log(String.format("[%s] [DEBUG] %s", tag, msg));
+        if (existsXposedBridge) {
+            XposedBridge.log(String.format("[%s] [DEBUG] %s", tag, msg));
+        }
     }
 
-    public void debug(String msg) {
+    public static void debug(String msg) {
         debug(logTag, msg);
     }
 
-    public void info(String tag, String msg) {
+    public static void info(String tag, String msg) {
         Log.i(tag, msg);
-        XposedBridge.log(String.format("[%s] [INFO] %s", tag, msg));
+        if (existsXposedBridge) {
+            XposedBridge.log(String.format("[%s] [INFO] %s", tag, msg));
+        }
     }
 
-    public void info(String msg) {
+    public static void info(String msg) {
         info(logTag, msg);
     }
 
-    public void error(String tag, String msg) {
+    public static void error(String tag, String msg) {
         Log.e(tag, msg);
-        XposedBridge.log(new RuntimeException(
-                String.format("[%s] [ERROR] %s", tag, msg)
-        ));
+        if (existsXposedBridge) {
+            XposedBridge.log(new RuntimeException(
+                    String.format("[%s] [ERROR] %s", tag, msg)
+            ));
+        }
     }
 
-    public void error(String msg) {
+    public static void error(String msg) {
         error(logTag, msg);
     }
 
-    public void error(String tag, String msg, Throwable e) {
+    public static void error(String tag, String msg, Throwable e) {
         Log.e(tag, msg, e);
-        XposedBridge.log(new RuntimeException(
-                String.format("[%s] [ERROR] %s", tag, msg),
-                e
-        ));
+        if (existsXposedBridge) {
+            XposedBridge.log(new RuntimeException(
+                    String.format("[%s] [ERROR] %s", tag, msg),
+                    e
+            ));
+        }
     }
 
-    public void error(String msg, Throwable e) {
+    public static void error(String msg, Throwable e) {
         error(logTag, msg, e);
     }
 
-    public void error(Throwable e) {
+    public static void error(Throwable e) {
         error(logTag, "", e);
     }
 }

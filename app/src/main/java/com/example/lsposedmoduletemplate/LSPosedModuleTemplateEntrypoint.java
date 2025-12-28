@@ -1,18 +1,18 @@
 package com.example.lsposedmoduletemplate;
 
 import com.example.lsposedmoduletemplate.utils.LogUtil;
-import com.example.lsposedmoduletemplate.utils.WatchUtil;
 
 import java.util.Objects;
 
 import de.robv.android.xposed.IXposedHookLoadPackage;
+import de.robv.android.xposed.IXposedHookZygoteInit;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
-public class LSPosedModuleTemplateEntrypoint implements IXposedHookLoadPackage {
+public class LSPosedModuleTemplateEntrypoint implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 
-    private LogUtil initLogUtil() {
-        GlobalInstance.logUtil = new LogUtil("LSPosedModuleTemplate");
-        return GlobalInstance.logUtil;
+    @Override
+    public void initZygote(StartupParam startupParam) throws Throwable {
+        GlobalInstance.modulePath = startupParam.modulePath;
     }
 
     @Override
@@ -21,39 +21,15 @@ public class LSPosedModuleTemplateEntrypoint implements IXposedHookLoadPackage {
             return;
         }
 
-        LogUtil logUtil = initLogUtil();
-
-        logUtil.info("Loading Package: " + lpparam.packageName);
-        logUtil.info("Hook Loading Success!");
-
-        int flag = WatchUtil.LOG_FORMAT_FLAG_DUMP_ARGS |
-                WatchUtil.LOG_FORMAT_FLAG_DUMP_BACKTRACE |
-                WatchUtil.LOG_FORMAT_FLAG_DUMP_RETURN;
-
-        try {
-            WatchUtil.watchClass(
-                    lpparam.classLoader,
-                    0,
-                    "com.example.demoapp.testdemo.TestClass"
-            );
-//            WatchUtil.watchMethod(
-//                    lpparam.classLoader,
-//                    flag,
-//                    false,
-//                    "com.example.demoapp.testdemo.TestClass",
-//                    "test"
-//            );
-
-//            WatchUtil.watchConstructor(
-//                    lpparam.classLoader,
-//                    flag,
-//                    true,
-//                    "com.example.demoapp.testdemo.TestClass",
-//                    String.class
-//            );
-        } catch (Throwable e) {
-            logUtil.error(e);
-            throw e;
+        // 打开模块本身APP时不进行Hook
+        String modulePackageName = Objects.requireNonNull(this.getClass().getPackage()).getName();
+        if (Objects.equals(lpparam.packageName, modulePackageName)) {
+            return;
         }
+
+        LogUtil.info("Module Package Name: " + modulePackageName);
+        LogUtil.info("Loading Package: " + lpparam.packageName);
+
+        LogUtil.info("Hook Loading Success!");
     }
 }

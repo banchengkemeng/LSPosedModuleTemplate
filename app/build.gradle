@@ -2,6 +2,8 @@ plugins {
     alias libs.plugins.android.application
 }
 
+apply plugin: 'com.yanzhenjie.andserver'
+
 android {
     namespace = "com.example.lsposedmoduletemplate"
     compileSdk = 34
@@ -31,6 +33,13 @@ android {
 
 dependencies {
     compileOnly libs.api
+    implementation 'com.yanzhenjie.andserver:api:2.1.12'
+    annotationProcessor 'com.yanzhenjie.andserver:processor:2.1.12'
+
+    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.navigation:navigation-fragment:2.6.0'
+    implementation 'androidx.navigation:navigation-ui:2.6.0'
 
     implementation libs.appcompat
     implementation libs.material

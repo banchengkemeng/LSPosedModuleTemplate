@@ -9,8 +9,7 @@ LSPosed模块 项目模板
 1. local.properties: sdk.dir
 
 ### Class Name
-1. app/build.gradle: android.namespace
-2. app/build.gradle: android.defaultConfig.applicationId
+1. 全局搜索 "com.example.lsposedmoduletemplate
 
 ### Entrypoint Class Name
 1. app/src/main/assets/xposed_init
@@ -20,11 +19,29 @@ LSPosed模块 项目模板
 ### App Name
 1. app/src/main/res/values/strings.xml: app_name
 
-## 工具类
-### 1. utils.LogUtil
+## 项目结构介绍
+### 1. controller
+WebServer控制器
+> 该包存放WebServer接口(不强制放在该包内), 使用AndServer框架, 接口编写方式参照Sprint注解方式的Web开发
+### 2. service
+Android后台服务
+1. HttpService 
+> 使用Service方式启动AndServer
+### 3. ui
+模块用户界面
+1. HomeFragment
+   > 主页Fragment, 用来配置AndServer监听的地址和端口
+2. MainActivity
+    > 入口Activity
+### 4. utils
+工具类
+#### 4.1. utils.IntentUtil
+Intent工具类
+> 用于快速创建逻辑一致的Intent
+#### 4.2. utils.LogUtil
 日志工具类
 > 用于打印日志, 会同时输出到 Logcat 和 XposedBridge
-### 2. utils.WatchUtil
+#### 4.3. utils.WatchUtil
 监控工具类
 1. 监控 构造器/函数 的调用 watchConstructor/watchMethod
 2. 监控 类中所有函数/构造器 的调用 watchClass
@@ -52,4 +69,12 @@ Backtrace: java.lang.Throwable
     at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:592)
     at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:947)
 ```
+### 5. GlobalInstance
+存放全局实例
+### 6. LSPosedModuleTemplateEntrypoint
+模块入口类
+### 7. WebServerManager
+AndServer-WebServer管理器
+> 管理WebServer的创建、启动、停止、状态
+
 

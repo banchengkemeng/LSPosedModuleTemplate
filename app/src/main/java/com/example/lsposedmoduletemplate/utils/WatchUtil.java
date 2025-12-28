@@ -2,8 +2,6 @@ package com.example.lsposedmoduletemplate.utils;
 
 import android.util.Log;
 
-import com.example.lsposedmoduletemplate.GlobalInstance;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
@@ -99,7 +97,6 @@ public class WatchUtil {
 
 class WatchMethodHook extends XC_MethodHook {
 
-    private static final LogUtil logUtil = GlobalInstance.logUtil;
     private final int logFormatFlag;
     private StringBuilder trace;
 
@@ -116,7 +113,7 @@ class WatchMethodHook extends XC_MethodHook {
             }
             super.beforeHookedMethod(param);
         } catch (Throwable e) {
-            logUtil.error(e);
+            LogUtil.error(e);
             throw e;
         }
     }
@@ -131,9 +128,9 @@ class WatchMethodHook extends XC_MethodHook {
             if (shouldDumpBACKTRACE()) {
                 trace.append("\nBacktrace: ").append(Log.getStackTraceString(new Throwable()));
             }
-            logUtil.info(trace.toString());
+            LogUtil.info(trace.toString());
         } catch (Throwable e) {
-            logUtil.error(e);
+            LogUtil.error(e);
             throw e;
         }
     }
